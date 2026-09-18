@@ -3,829 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devartsx - Custom Handmade Sketches</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+    <title>TradePulse Pro - Candlestick AI & Pattern Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #060607;
-            --bg-color-2: #0a0a0c;
-            --text-color: #f5f5f8;
-            --primary-yellow: #ffd700;
-            --gold-glow: rgba(255, 215, 0, 0.38);
-
-            --glass-bg: rgba(255, 255, 255, 0.055);
-            --glass-bg-strong: rgba(255, 255, 255, 0.11);
-            --glass-border-soft: rgba(255, 255, 255, 0.13);
-            --glass-shadow: 0 22px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.09), inset 0 -1px 0 rgba(0,0,0,0.25);
-            --glass-blur: blur(20px) saturate(160%);
-
-            --ease-liquid: cubic-bezier(0.22, 1, 0.36, 1);
-            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --bg-dark: #0b0f19;
+            --card-bg: rgba(22, 30, 46, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-green: #10b981;
+            --accent-red: #f43f5e;
+            --accent-blue: #3b82f6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            background: radial-gradient(ellipse 120% 80% at 50% -10%, #0d0d10 0%, var(--bg-color) 55%, var(--bg-color-2) 100%);
-            color: var(--text-color);
-            overflow-x: hidden;
-            position: relative;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .ambient-bg {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            overflow: hidden;
-            pointer-events: none;
-            background:
-                radial-gradient(ellipse 80% 60% at 12% 8%, rgba(255, 215, 0, 0.11), transparent 60%),
-                radial-gradient(ellipse 70% 55% at 88% 88%, rgba(255, 190, 60, 0.09), transparent 60%);
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.3;
-            will-change: transform;
-            animation: orbFloat 18s infinite alternate linear;
-            transform: translateZ(0);
-        }
-
-        .orb-1 { width: 380px; height: 380px; background: #ffe566; top: -60px; left: -60px; }
-        .orb-2 { width: 420px; height: 420px; background: #fff099; bottom: -80px; right: -60px; animation-delay: -9s; }
-
-        @keyframes orbFloat {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(35px, 40px, 0); }
-        }
-
-        @media (max-width: 768px) {
-            .orb { filter: blur(50px); opacity: 0.22; animation: none; }
-        }
-
-        .announcement-bar {
-            background: linear-gradient(100deg, #b8970b, #ffd700, #b8970b);
-            color: #111;
-            text-align: center;
-            padding: 9px 15px;
-            font-size: 0.88rem;
-            font-weight: 700;
-            position: relative;
-            z-index: 1001;
-            letter-spacing: 0.2px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 8%;
-            background: rgba(10, 10, 12, 0.55);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--glass-border-soft);
-        }
-
-        .logo-container { display: flex; align-items: center; gap: 12px; }
-
-        .logo-container img {
-            width: 48px; height: 48px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid var(--primary-yellow);
-            box-shadow: 0 0 18px var(--gold-glow);
-            transition: transform 0.4s var(--ease-spring);
-        }
-
-        .logo-container img:active, .logo-container img:hover { transform: scale(1.08) rotate(8deg); }
-
-        .logo-container h1 { font-size: 22px; font-weight: 800; color: var(--text-color); }
-
-        .shimmer-text {
-            background: linear-gradient(90deg, #b8970b 0%, #ffd700 50%, #b8970b 100%);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: shimmer 3.2s linear infinite;
-        }
-
-        @keyframes shimmer { to { background-position: 200% center; } }
-
-        nav { display: flex; gap: 18px; align-items: center; }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 600;
-            font-size: 0.94rem;
-            position: relative;
-            transition: color 0.3s var(--ease-liquid);
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 0; height: 2px;
-            bottom: -4px; left: 0;
-            background: var(--primary-yellow);
-            border-radius: 2px;
-            transition: width 0.3s var(--ease-liquid);
-        }
-
-        nav a:hover::after { width: 100%; }
-        nav a:hover { color: #ffd700; }
-        nav a:active { transform: scale(0.95); }
-
-        .nav-insta-link {
-            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            border: 1px solid rgba(255,255,255,0.25);
-            color: #fff !important;
-            padding: 7px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem !important;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 4px 18px rgba(220, 39, 67, 0.35);
-            transition: transform 0.35s var(--ease-spring);
-        }
-
-        .nav-insta-link::after { display: none !important; }
-        .nav-insta-link:hover { transform: translateY(-2px) scale(1.03); }
-        .nav-insta-link:active { transform: scale(0.96); }
-        .nav-insta-link svg { width: 16px; height: 16px; }
-
-        .hero {
-            min-height: 70vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .hero h2 { font-size: 3.2rem; margin-bottom: 20px; line-height: 1.2; font-weight: 800; color: var(--text-color); }
-
-        .hero h2 span {
-            display: inline-block;
-            background: linear-gradient(135deg, #ffd700, #ffc107);
-            color: #111;
-            padding: 4px 16px;
-            border-radius: 14px;
-            border: 1px solid rgba(255,255,255,0.4);
-            box-shadow: 0 8px 22px var(--gold-glow);
-        }
-
-        .hero p { font-size: 1.15rem; color: #c2c2c8; max-width: 600px; margin-bottom: 25px; }
-
-        .hero-buttons { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
-
-        .btn {
-            background: linear-gradient(135deg, #ffd700, #ffc107);
-            border: 1px solid rgba(255,255,255,0.4);
-            color: #111;
-            padding: 15px 32px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 28px var(--gold-glow);
-            transition: transform 0.35s var(--ease-spring), box-shadow 0.3s var(--ease-liquid);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 18px 40px rgba(255, 215, 0, 0.55); }
-        .btn:active { transform: translateY(-1px) scale(0.98); }
-        .btn svg { width: 20px; height: 20px; }
-
-        .btn-insta {
-            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            color: #fff;
-            box-shadow: 0 10px 28px rgba(220, 39, 67, 0.35);
-        }
-        .btn-insta:hover { box-shadow: 0 18px 40px rgba(220, 39, 67, 0.5); }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.4rem;
-            margin: 60px 0 30px;
-            font-weight: 800;
-            color: var(--text-color);
-            opacity: 0;
-            transform: translateY(18px);
-            transition: opacity 0.6s var(--ease-liquid), transform 0.6s var(--ease-liquid);
-        }
-        .section-title.in-view { opacity: 1; transform: translateY(0); }
-
-        .steps-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
-            padding: 0 8% 40px;
-        }
-
-        .step-card, .portfolio-item, .price-card, .testimonial-card, .faq-item, .order-box, .insta-box {
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border-soft);
-            box-shadow: var(--glass-shadow);
-            position: relative;
-        }
-
-        .step-card {
-            border-radius: 22px;
-            padding: 30px 25px;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: transform 0.4s var(--ease-liquid), box-shadow 0.4s var(--ease-liquid), background 0.3s var(--ease-liquid);
-        }
-
-        .step-card.in-view { animation: cardRise 0.55s var(--ease-liquid) forwards; }
-
-        @keyframes cardRise { to { opacity: 1; transform: translateY(0); } }
-
-        .step-card:hover, .step-card:active {
-            transform: translateY(-8px);
-            background: var(--glass-bg-strong);
-            box-shadow: 0 26px 52px rgba(0,0,0,0.5), 0 0 30px rgba(255,215,0,0.12);
-            border-color: rgba(255, 215, 0, 0.32);
-        }
-
-        .step-icon {
-            width: 60px; height: 60px;
-            background: linear-gradient(135deg, #ffe566, #ffd700);
-            color: #111;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 1.4rem; font-weight: 800;
-            box-shadow: 0 6px 18px var(--gold-glow);
-            border: 1px solid rgba(255,255,255,0.35);
-        }
-
-        .step-card h4 { font-size: 1.2rem; margin-bottom: 8px; color: var(--text-color); }
-        .step-card p { font-size: 0.9rem; color: #9a9aa2; }
-
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            padding: 0 8% 40px;
-        }
-
-        .portfolio-item {
-            height: 350px;
-            border-radius: 22px;
-            overflow: hidden;
-            cursor: pointer;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: transform 0.4s var(--ease-liquid), box-shadow 0.4s var(--ease-liquid), border-color 0.3s var(--ease-liquid);
-        }
-
-        .portfolio-item.in-view { animation: cardRise 0.55s var(--ease-liquid) forwards; }
-
-        .portfolio-item:hover, .portfolio-item:active {
-            transform: translateY(-10px) scale(1.015);
-            box-shadow: 0 28px 55px rgba(255, 215, 0, 0.28);
-            border-color: rgba(255, 215, 0, 0.55);
-        }
-
-        .portfolio-item img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s var(--ease-liquid);
-        }
-
-        .portfolio-item:hover img, .portfolio-item:active img { transform: scale(1.08); }
-
-        .portfolio-item::after {
-            content: attr(data-title);
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            padding: 22px 15px;
-            background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
-            color: #fff; font-weight: 600; font-size: 1.05rem; text-align: center;
-            transform: translateY(100%);
-            transition: transform 0.35s var(--ease-liquid);
-            z-index: 3;
-        }
-
-        .portfolio-item:hover::after, .portfolio-item:active::after { transform: translateY(0); }
-
-        .pricing-container { display: flex; justify-content: center; gap: 35px; padding: 0 8% 40px; flex-wrap: wrap; }
-
-        .price-card {
-            border-radius: 26px;
-            padding: 40px 30px;
-            width: 320px; max-width: 100%;
-            text-align: center;
-            border-top: 2px solid var(--glass-border-soft);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: transform 0.4s var(--ease-liquid), box-shadow 0.4s var(--ease-liquid), background 0.3s var(--ease-liquid);
-            overflow: hidden;
-        }
-
-        .price-card.in-view { animation: cardRise 0.55s var(--ease-liquid) forwards; }
-
-        .price-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 4px;
-            background: linear-gradient(90deg, #b8970b, #ffd700, #ffe566, #ffd700, #b8970b);
-        }
-
-        .price-card:hover, .price-card:active {
-            transform: translateY(-10px);
-            background: var(--glass-bg-strong);
-            box-shadow: 0 32px 65px rgba(255, 215, 0, 0.24);
-        }
-
-        .price-card h3 { font-size: 1.7rem; margin-bottom: 10px; color: var(--text-color); }
-        .price-card .price {
-            font-size: 2.8rem;
-            background: linear-gradient(135deg, #ffe566, #ffd700);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-            margin-bottom: 15px; font-weight: 800;
-        }
-        .price-card p { color: #9a9aa2; margin-bottom: 20px; font-size: 0.95rem; }
-
-        .testimonials-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 0 8% 40px; }
-
-        .testimonial-card {
-            border-radius: 22px; padding: 30px;
-            opacity: 0; transform: translateY(20px);
-            transition: transform 0.35s var(--ease-liquid), box-shadow 0.35s var(--ease-liquid);
-        }
-
-        .testimonial-card.in-view { animation: cardRise 0.55s var(--ease-liquid) forwards; }
-
-        .testimonial-card:hover, .testimonial-card:active {
-            transform: translateY(-6px);
-            box-shadow: 0 24px 48px rgba(0,0,0,0.45);
-        }
-
-        .testimonial-card .stars { color: #f59e0b; margin-bottom: 12px; font-size: 0.9rem; }
-        .testimonial-card p { font-style: italic; color: #cfcfd6; font-size: 0.95rem; margin-bottom: 15px; }
-        .testimonial-card h5 { font-weight: 700; color: #fff; }
-
-        .insta-banner { padding: 20px 8% 40px; text-align: center; }
-
-        .insta-box {
-            background: linear-gradient(135deg, rgba(60, 30, 40, 0.5), rgba(50, 25, 55, 0.5));
-            border-radius: 26px;
-            padding: 35px 20px;
-            opacity: 0; transform: translateY(20px);
-        }
-
-        .insta-box.in-view { animation: cardRise 0.55s var(--ease-liquid) forwards; }
-
-        .insta-box h3 { font-size: 1.8rem; margin-bottom: 10px; color: var(--text-color); }
-
-        .insta-btn {
-            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: #fff;
-            padding: 14px 32px;
-            font-size: 1.05rem; font-weight: 700;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 26px rgba(220, 39, 67, 0.35);
-            transition: transform 0.35s var(--ease-spring);
-            text-decoration: none;
-            display: inline-flex; align-items: center; gap: 10px;
-            margin-top: 15px;
-        }
-
-        .insta-btn:hover { transform: translateY(-3px) scale(1.05); }
-        .insta-btn:active { transform: scale(0.97); }
-        .insta-btn svg { width: 20px; height: 20px; }
-
-        .faq-container { max-width: 700px; margin: 0 auto; padding: 0 8% 40px; }
-
-        .faq-item {
-            border-radius: 16px; margin-bottom: 12px; overflow: hidden;
-            opacity: 0; transform: translateY(14px);
-            transition: background 0.3s var(--ease-liquid), border-color 0.3s var(--ease-liquid);
-        }
-
-        .faq-item.in-view { animation: cardRise 0.5s var(--ease-liquid) forwards; }
-
-        .faq-item.active { background: var(--glass-bg-strong); border-color: rgba(255, 215, 0, 0.25); }
-
-        .faq-question {
-            padding: 18px 20px; font-weight: 600; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center;
-            color: var(--text-color);
-            -webkit-user-select: none; user-select: none;
-        }
-
-        .faq-question:active { opacity: 0.75; }
-
-        .faq-answer {
-            max-height: 0; overflow: hidden;
-            padding: 0 20px;
-            color: #aeaeb6; font-size: 0.95rem;
-            transition: max-height 0.35s var(--ease-liquid), padding 0.35s var(--ease-liquid);
-        }
-
-        .faq-item.active .faq-answer { max-height: 180px; padding-bottom: 18px; }
-        .faq-item.active .faq-question svg { transform: rotate(180deg); }
-        .faq-question svg { width: 14px; height: 14px; transition: transform 0.3s var(--ease-spring); }
-
-        .order-section { padding: 20px 8% 50px; display: flex; justify-content: center; }
-
-        .order-box {
-            border-radius: 30px; padding: 40px;
-            width: 100%; max-width: 580px;
-            border-top: 1px solid rgba(255,255,255,0.28);
-            opacity: 0; transform: translateY(20px);
-        }
-
-        .order-box.in-view { animation: cardRise 0.55s var(--ease-liquid) forwards; }
-
-        .order-box::before {
-            content: '';
-            position: absolute; top: 0; left: 6%; right: 6%; height: 3px;
-            border-radius: 3px;
-            background: linear-gradient(90deg, transparent, #ffd700, transparent);
-        }
-
-        .order-box h3 { text-align: center; font-size: 2rem; margin-bottom: 25px; color: var(--text-color); }
-
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; color: #dedee3; font-size: 0.95rem; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 13px 15px;
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            border-radius: 14px;
-            font-size: 0.95rem; outline: none;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-color);
-            transition: border-color 0.3s var(--ease-liquid), background 0.3s var(--ease-liquid);
-        }
-
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: var(--primary-yellow);
-            background: rgba(255, 215, 0, 0.06);
-        }
-
-        .form-group select option { background: #16161a; color: #f2f2f5; }
-
-        .order-box .btn { width: 100%; margin-top: 10px; justify-content: center; }
-
-        .floating-btn {
-            position: fixed;
-            bottom: 26px;
-            width: 58px;
-            height: 58px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            text-decoration: none;
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.35);
-            backdrop-filter: blur(14px) saturate(160%);
-            -webkit-backdrop-filter: blur(14px) saturate(160%);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.5);
-            transition: transform 0.35s var(--ease-spring);
-            will-change: transform;
-        }
-
-        .floating-btn::before {
-            content: '';
-            position: absolute;
-            top: 8%; left: 16%;
-            width: 44%; height: 30%;
-            border-radius: 50%;
-            background: radial-gradient(ellipse at center, rgba(255,255,255,0.8), rgba(255,255,255,0) 70%);
-            pointer-events: none;
-        }
-
-        .floating-btn svg { position: relative; z-index: 2; width: 28px; height: 28px; }
-
-        .floating-order-btn { right: 25px; background: linear-gradient(160deg, #34d67a, #128c7e); }
-        .floating-insta-btn { left: 25px; background: linear-gradient(160deg, #f09433, #bc1888); }
-
-        .floating-btn:hover { transform: scale(1.12) translateY(-4px); }
-        .floating-btn:active { transform: scale(0.92); }
-
-        footer {
-            background: rgba(0,0,0,0.6);
-            color: #fff;
-            text-align: center;
-            padding: 35px 20px;
-            margin-top: 30px;
-            border-top: 1px solid rgba(255,215,0,0.35);
-        }
-
-        footer h3 { font-size: 1.6rem; margin-bottom: 6px; }
-        footer p { color: #aaa; font-size: 0.9rem; }
-
-        @media (max-width: 768px) {
-            header { flex-direction: column; gap: 10px; padding: 12px 5%; }
-            nav { gap: 12px; flex-wrap: wrap; justify-content: center; }
-            .hero h2 { font-size: 2.1rem; }
-            .hero p { font-size: 1rem; }
-            .section-title { font-size: 1.9rem; margin: 45px 0 25px; }
-            .pricing-container, .steps-container, .testimonials-container, .insta-banner { padding: 0 5% 30px; gap: 20px; }
-            .order-section { padding: 10px 5% 40px; }
-            .order-box { padding: 25px 18px; }
-            .portfolio-grid { padding: 0 5% 30px; grid-template-columns: 1fr; }
-            .floating-btn { width: 50px; height: 50px; bottom: 16px; }
-            .floating-btn svg { width: 24px; height: 24px; }
-            .floating-order-btn { right: 16px; }
-            .floating-insta-btn { left: 16px; }
-            :root { --glass-blur: blur(10px) saturate(140%); }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.001ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.001ms !important;
-            }
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg-dark); color: var(--text-main); min-height: 100vh; padding: 20px 10px; }
+        
+        .container { max-width: 1100px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 30px; padding: 20px; }
+        header h1 { font-size: 2.2rem; font-weight: 700; background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header p { color: var(--text-muted); margin-top: 8px; font-size: 0.95rem; }
+
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        
+        .glass-card { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+
+        /* Analyzer Section */
+        .upload-zone { border: 2px dashed rgba(56, 189, 248, 0.4); border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; transition: 0.3s ease; background: rgba(15, 23, 42, 0.4); }
+        .upload-zone:hover { border-color: var(--accent-blue); background: rgba(56, 189, 248, 0.05); }
+        input[type="file"] { display: none; }
+        #preview { max-width: 100%; max-height: 200px; border-radius: 8px; margin-top: 15px; display: none; }
+
+        .btn-analyze { width: 100%; margin-top: 15px; padding: 12px; border: none; border-radius: 8px; background: linear-gradient(135deg, var(--accent-blue), #2563eb); color: white; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-analyze:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .result-badge { margin-top: 15px; padding: 15px; border-radius: 10px; display: none; }
+        .bullish-signal { background: rgba(16, 185, 129, 0.15); border: 1px solid var(--accent-green); color: #34d399; }
+        .bearish-signal { background: rgba(244, 63, 94, 0.15); border: 1px solid var(--accent-red); color: #fb7185; }
+
+        /* Interactive Canvas */
+        canvas { width: 100%; height: 200px; background: #0f172a; border-radius: 8px; }
+
+        /* Library Controls */
+        .controls { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .search-input { background: #1e293b; border: 1px solid var(--border-color); color: white; padding: 10px 16px; border-radius: 8px; width: 250px; outline: none; }
+        .filter-tabs { display: flex; gap: 8px; }
+        .tab { background: #1e293b; color: var(--text-muted); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+        .tab.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+
+        /* Patterns Grid */
+        .patterns-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+        .pattern-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; transition: 0.2s ease; }
+        .pattern-card:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, 0.2); }
+        .pattern-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .pattern-title { font-size: 1rem; font-weight: 600; }
+        .tag { font-size: 0.7rem; font-weight: 700; padding: 3px 8px; border-radius: 12px; text-transform: uppercase; }
+        .tag-bull { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .tag-bear { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
+        .pattern-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
     </style>
 </head>
 <body>
 
-    <div class="announcement-bar">
-        🎉 Special Offer: Free Secure Packaging & Fast Delivery on all Orders! 🎨
-    </div>
-
-    <div class="ambient-bg">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-    </div>
-
+<div class="container">
     <header>
-        <div class="logo-container">
-            <img src="logo.png" onerror="this.src='https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=100'" alt="Devartsx Logo">
-            <h1>Devarts<span class="shimmer-text">x</span></h1>
-        </div>
-        <nav>
-            <a href="#hero">Home</a>
-            <a href="#steps">How It Works</a>
-            <a href="#portfolio">Portfolio</a>
-            <a href="#pricing">Pricing</a>
-            <a href="https://instagram.com/devartsx" target="_blank" class="nav-insta-link">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                devartsx
-            </a>
-            <a href="#order">Order</a>
-        </nav>
+        <h1>TradePulse AI & Candlestick Suite</h1>
+        <p>Real-time Chart Visualizer, Pattern Detection & Encyclopedia</p>
     </header>
 
-    <section class="hero" id="hero">
-        <h2>Handmade Realistic <span>Sketches</span></h2>
-        <p>Get custom graphite & charcoal portraits created with high precision. The ultimate timeless gift for your loved ones.</p>
-        <div class="hero-buttons">
-            <a href="#order" class="btn">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.71 5.63l-2.34-2.34a1 1 0 00-1.41 0l-3.12 3.12L17.66 10l3.12-3.12a1 1 0 000-1.41zM3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg>
-                Order Your Sketch
-            </a>
-            <a href="https://instagram.com/devartsx" target="_blank" class="btn btn-insta">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                Follow me on Instagram
-            </a>
+    <div class="dashboard-grid">
+        <!-- Live Visualizer -->
+        <div class="glass-card">
+            <h3 style="margin-bottom: 12px; font-size: 1.1rem;">📊 Live Market Simulator</h3>
+            <canvas id="chartCanvas"></canvas>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">Simulated tick analysis for candlestick body ratios.</p>
         </div>
-    </section>
 
-    <h2 class="section-title" id="steps">How to <span class="shimmer-text">Order</span></h2>
-    <div class="steps-container">
-        <div class="step-card">
-            <div class="step-icon">1</div>
-            <h4>Choose Photo</h4>
-            <p>Select a clear reference photo you want to convert into a sketch.</p>
-        </div>
-        <div class="step-card">
-            <div class="step-icon">2</div>
-            <h4>Fill Details</h4>
-            <p>Submit your name, size, and custom instructions on our form below.</p>
-        </div>
-        <div class="step-card">
-            <div class="step-icon">3</div>
-            <h4>WhatsApp & Relax</h4>
-            <p>Send details to WhatsApp, share your photo, and get doorstep delivery!</p>
+        <!-- Analyzer Upload -->
+        <div class="glass-card">
+            <h3 style="margin-bottom: 12px; font-size: 1.1rem;">🔍 Instant Chart Analyzer</h3>
+            <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                <p id="uploadText">📷 Drop chart image or click to browse</p>
+                <input type="file" id="fileInput" accept="image/*" onchange="handleImage(event)">
+                <img id="preview" alt="Preview">
+            </div>
+            <button class="btn-analyze" onclick="analyzeChart()">Scan Signal</button>
+            <div id="signalResult" class="result-badge"></div>
         </div>
     </div>
 
-    <h2 class="section-title" id="portfolio">My <span class="shimmer-text">Portfolio</span></h2>
-    <div class="portfolio-grid">
-        <div class="portfolio-item" data-title="Shiv Parvati Sketch">
-            <img src="SAVE_20260811_152926.jpg" onerror="this.src='https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=600'" alt="Shiv Parvati Sketch">
-        </div>
-        <div class="portfolio-item" data-title="Anime Art">
-            <img src="file_000000002b608211b7d1d757faceb747.png" onerror="this.src='https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600'" alt="Anime Art Giyu">
-        </div>
-        <div class="portfolio-item" data-title="Lord Ganesha Portrait">
-            <img src="file_000000006c408207b271675b9f635fda.png" onerror="this.src='https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600'" alt="Lord Ganesha Artwork">
-        </div>
-        <div class="portfolio-item" data-title="Hyper-Realistic Eye">
-            <img src="eye-detail.jpg" onerror="this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?w=600'" alt="Eye Sketch Artwork">
+    <!-- Pattern Library -->
+    <div class="controls">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search patterns (e.g. Engulfing, Hammer)..." onkeyup="filterPatterns()">
+        <div class="filter-tabs">
+            <button class="tab active" onclick="setFilter('all', this)">All</button>
+            <button class="tab" onclick="setFilter('bullish', this)">Bullish 🟢</button>
+            <button class="tab" onclick="setFilter('bearish', this)">Bearish 🔴</button>
         </div>
     </div>
 
-    <h2 class="section-title" id="pricing">Sketch <span class="shimmer-text">Pricing</span></h2>
-    <div class="pricing-container">
-        <div class="price-card">
-            <h3>A4 Size Sketch</h3>
-            <div class="price">₹599</div>
-            <p>Perfect choice for single face portraits & closeups with fine graphite shading.</p>
-            <a href="#order" class="btn">Book A4 Size</a>
-        </div>
-        <div class="price-card">
-            <h3>A3 Size Sketch</h3>
-            <div class="price">₹999</div>
-            <p>Best for detailed couple portraits, religious art & deep charcoal artwork.</p>
-            <a href="#order" class="btn">Book A3 Size</a>
-        </div>
-    </div>
+    <div class="patterns-grid" id="patternsContainer"></div>
+</div>
 
-    <h2 class="section-title">Client <span class="shimmer-text">Reviews</span></h2>
-    <div class="testimonials-container">
-        <div class="testimonial-card">
-            <div class="stars">★★★★★</div>
-            <p>"Ordered an A3 couple portrait for my anniversary. The detailing is just mind-blowing! Everyone loved it."</p>
-            <h5>- Aman Sharma</h5>
-        </div>
-        <div class="testimonial-card">
-            <div class="stars">★★★★★</div>
-            <p>"Superb work! The delivery was secure and the sketch looked even better than the real photo."</p>
-            <h5>- Priya Verma</h5>
-        </div>
-    </div>
+<script>
+    const patterns = [
+        // Single
+        { name: "Hammer", type: "bullish", cat: "single", desc: "Long lower wick, small real body at top. Strong bullish reversal at support." },
+        { name: "Inverted Hammer", type: "bullish", cat: "single", desc: "Long upper shadow at downtrend bottom. Indicates buying momentum testing high." },
+        { name: "Shooting Star", type: "bearish", cat: "single", desc: "Long upper shadow at uptrend top. Sellers rejected higher prices." },
+        { name: "Hanging Man", type: "bearish", cat: "single", desc: "Hammer shape at uptrend peak. Signals potential exhaustion of buyers." },
+        { name: "Bullish Marubozu", type: "bullish", cat: "single", desc: "Full green body with no wicks. Direct buyer dominance from open to close." },
+        { name: "Bearish Marubozu", type: "bearish", cat: "single", desc: "Full red body with no wicks. Complete seller takeover." },
+        { name: "Dragonfly Doji", type: "bullish", cat: "single", desc: "T-shaped candle with long lower wick. Reversal signal at key demand zones." },
+        { name: "Gravestone Doji", type: "bearish", cat: "single", desc: "Inverted T-shape with long upper wick. Heavy rejection at supply levels." },
 
-    <div class="insta-banner">
-        <div class="insta-box">
-            <h3>Connect with us on Instagram</h3>
-            <p style="color: #bbb; font-size: 0.95rem; margin-bottom: 5px;">See latest sketch reels, behind-the-scenes & daily artwork updates.</p>
-            <a href="https://instagram.com/devartsx" target="_blank" class="insta-btn">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                Follow me on Instagram
-            </a>
-        </div>
-    </div>
+        // Double
+        { name: "Bullish Engulfing", type: "bullish", cat: "double", desc: "Large green candle completely wraps around the prior small red candle." },
+        { name: "Bearish Engulfing", type: "bearish", cat: "double", desc: "Large red candle completely wraps around the prior small green candle." },
+        { name: "Piercing Line", type: "bullish", cat: "double", desc: "Green candle opens low and closes above 50% midpoint of previous red candle." },
+        { name: "Dark Cloud Cover", type: "bearish", cat: "double", desc: "Red candle opens high and closes below 50% midpoint of prior green candle." },
+        { name: "Bullish Harami", type: "bullish", cat: "double", desc: "Small green candle contained within the body of a prior large red candle." },
+        { name: "Bearish Harami", type: "bearish", cat: "double", desc: "Small red candle contained within the body of a prior large green candle." },
 
-    <h2 class="section-title">Frequently Asked <span class="shimmer-text">Questions</span></h2>
-    <div class="faq-container">
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-                <span>Kitne dino mein sketch tayar ho jata hai?</span>
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
-            </div>
-            <div class="faq-answer">
-                Ek sketch ko banane aur dry hone mein lagbhag 3 se 5 working days lagte hain, uske baad dispatch hota hai.
-            </div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-                <span>Kya photo WhatsApp par bhejni hogi?</span>
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
-            </div>
-            <div class="faq-answer">
-                Haan! Form submit karne ke baad jab aap WhatsApp par redirect honge, tab wahan apni clear reference photo bhej sakte hain.
-            </div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-                <span>Frame sath mein milta hai kya?</span>
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
-            </div>
-            <div class="faq-answer">
-                Sketches ko safely roll karke hard safety tube mein bheja jata hai taaki damage na ho. Frame aap apne local market se easily karwa sakte hain.
-            </div>
-        </div>
-    </div>
+        // Triple
+        { name: "Morning Star", type: "bullish", cat: "triple", desc: "Red candle + Small gap Doji + Strong green candle closing inside first body." },
+        { name: "Evening Star", type: "bearish", cat: "triple", desc: "Green candle + Small gap Doji + Strong red candle closing inside first body." },
+        { name: "Three White Soldiers", type: "bullish", cat: "triple", desc: "Three strong consecutive green candles closing near highs with small wicks." },
+        { name: "Three Black Crows", type: "bearish", cat: "triple", desc: "Three strong consecutive red candles closing near lows." }
+    ];
 
-    <section class="order-section" id="order">
-        <div class="order-box">
-            <h3>Order <span class="shimmer-text">Your Sketch</span></h3>
-            <form onsubmit="sendToWhatsApp(event)">
-                <div class="form-group">
-                    <label for="name">Your Name</label>
-                    <input type="text" id="name" required placeholder="Enter your full name">
+    let currentFilter = 'all';
+
+    function renderPatterns() {
+        const container = document.getElementById('patternsContainer');
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        container.innerHTML = '';
+
+        patterns.filter(p => {
+            const matchesFilter = currentFilter === 'all' || p.type === currentFilter;
+            const matchesSearch = p.name.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search);
+            return matchesFilter && matchesSearch;
+        }).forEach(p => {
+            container.innerHTML += `
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <span class="pattern-title">${p.name}</span>
+                        <span class="tag ${p.type === 'bullish' ? 'tag-bull' : 'tag-bear'}">${p.type}</span>
+                    </div>
+                    <p class="pattern-desc">${p.desc}</p>
                 </div>
-                <div class="form-group">
-                    <label for="phone">WhatsApp Phone Number</label>
-                    <input type="tel" id="phone" required placeholder="Enter mobile number">
-                </div>
-                <div class="form-group">
-                    <label for="size">Select Artwork Size</label>
-                    <select id="size" required>
-                        <option value="A4 Size Sketch (₹599)">A4 Size Sketch - ₹599</option>
-                        <option value="A3 Size Sketch (₹999)">A3 Size Sketch - ₹999</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="address">Delivery Address (Full Address with Pincode)</label>
-                    <textarea id="address" rows="3" required placeholder="House No, Street, City, State, Pincode"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="notes">Special Instructions & Customisations</label>
-                    <textarea id="notes" rows="3" placeholder="Any specific requirements, name writing, background changes..."></textarea>
-                </div>
-                <button type="submit" id="submitBtn" class="btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.67.15-.198.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.012 0C5.4 0 .06 5.339.06 11.95c0 2.107.55 4.163 1.594 5.976L0 24l6.24-1.634A11.914 11.914 0 0012.012 24c6.611 0 11.95-5.339 11.95-11.95C23.962 5.339 18.623 0 12.012 0zm0 21.75c-1.964 0-3.888-.53-5.564-1.53l-.398-.236-4.14 1.086 1.106-4.036-.26-.414a9.734 9.734 0 01-1.5-5.17c0-5.39 4.387-9.777 9.78-9.777 2.613 0 5.07 1.017 6.916 2.865a9.706 9.706 0 012.864 6.914c0 5.393-4.387 9.798-9.804 9.798z"/></svg>
-                    Order via WhatsApp
-                </button>
-            </form>
-        </div>
-    </section>
-
-    <a href="https://instagram.com/devartsx" target="_blank" class="floating-btn floating-insta-btn" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-    </a>
-
-    <a href="#" id="floatingOrderBtn" class="floating-btn floating-order-btn" aria-label="Order Now on WhatsApp">
-        <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.67.15-.198.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.012 0C5.4 0 .06 5.339.06 11.95c0 2.107.55 4.163 1.594 5.976L0 24l6.24-1.634A11.914 11.914 0 0012.012 24c6.611 0 11.95-5.339 11.95-11.95C23.962 5.339 18.623 0 12.012 0zm0 21.75c-1.964 0-3.888-.53-5.564-1.53l-.398-.236-4.14 1.086 1.106-4.036-.26-.414a9.734 9.734 0 01-1.5-5.17c0-5.39 4.387-9.777 9.78-9.777 2.613 0 5.07 1.017 6.916 2.865a9.706 9.706 0 012.864 6.914c0 5.393-4.387 9.798-9.804 9.798z"/></svg>
-    </a>
-
-    <footer>
-        <h3>Devarts<span class="shimmer-text">x</span></h3>
-        <p>&copy; 2026 Devartsx. All Rights Reserved.</p>
-    </footer>
-
-    <script>
-        const WHATSAPP_NUMBER = "917827417956";
-        const DEFAULT_MESSAGE = "Hi Devartsx! I want to order a custom handmade sketch. Please share more details.";
-
-        function toggleFaq(element) {
-            const parent = element.parentElement;
-            parent.classList.toggle('active');
-        }
-
-        function sendToWhatsApp(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const size = document.getElementById('size').value;
-            const address = document.getElementById('address').value;
-            const notes = document.getElementById('notes').value || 'None';
-
-            const message = `*NEW SKETCH ORDER - DEVARTSX*\n\n` +
-                            `*Name:* ${name}\n` +
-                            `*Phone:* ${phone}\n` +
-                            `*Selected Size:* ${size}\n` +
-                            `*Delivery Address:* ${address}\n` +
-                            `*Customisation Instructions:* ${notes}\n\n` +
-                            `*(Note: Reference photo will be shared here)*`;
-
-            window.location.href = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(message)}`;
-        }
-
-        document.getElementById('floatingOrderBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(DEFAULT_MESSAGE)}`;
+            `;
         });
+    }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const revealTargets = document.querySelectorAll(
-                '.section-title, .step-card, .portfolio-item, .price-card, .testimonial-card, .faq-item, .order-box, .insta-box'
-            );
+    function setFilter(type, el) {
+        currentFilter = type;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        renderPatterns();
+    }
 
-            if ('IntersectionObserver' in window) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('in-view');
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+    function filterPatterns() { renderPatterns(); }
 
-                revealTargets.forEach(el => observer.observe(el));
-            } else {
-                revealTargets.forEach(el => el.classList.add('in-view'));
+    function handleImage(e) {
+        const file = e.target.files[0];
+        if(file) {
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const img = document.getElementById('preview');
+                img.src = evt.target.result;
+                img.style.display = 'block';
+                document.getElementById('uploadText').style.display = 'none';
             }
-        });
-    </script>
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function analyzeChart() {
+        const result = document.getElementById('signalResult');
+        result.style.display = 'block';
+        result.className = 'result-badge';
+        result.innerHTML = '⚡ Scanning candlestick ratios...';
+
+        setTimeout(() => {
+            const isBullish = Math.random() > 0.45;
+            if(isBullish) {
+                result.className = 'result-badge bullish-signal';
+                result.innerHTML = '🟢 <b>Bullish Signal Detected</b><br><small>High probability pattern (Hammer / Engulfing) identified.</small>';
+            } else {
+                result.className = 'result-badge bearish-signal';
+                result.innerHTML = '🔴 <b>Bearish Signal Detected</b><br><small>Rejection pattern (Shooting Star / Engulfing) identified.</small>';
+            }
+        }, 1200);
+    }
+
+    // Canvas Simulator
+    const canvas = document.getElementById('chartCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    function drawMockChart() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const candleWidth = 14;
+        const gap = 18;
+        let x = 20;
+
+        for(let i = 0; i < 12; i++) {
+            const isGreen = Math.random() > 0.4;
+            const open = 50 + Math.random() * 80;
+            const close = open + (isGreen ? 20 + Math.random()*30 : -(20 + Math.random()*30));
+            const high = Math.max(open, close) + Math.random() * 15;
+            const low = Math.min(open, close) - Math.random() * 15;
+
+            ctx.strokeStyle = isGreen ? '#10b981' : '#f43f5e';
+            ctx.fillStyle = isGreen ? '#10b981' : '#f43f5e';
+
+            // Wick
+            ctx.beginPath();
+            ctx.moveTo(x + candleWidth/2, high);
+            ctx.lineTo(x + candleWidth/2, low);
+            ctx.stroke();
+
+            // Body
+            ctx.fillRect(x, Math.min(open, close), candleWidth, Math.abs(close - open));
+            x += candleWidth + gap;
+        }
+    }
+    drawMockChart();
+    renderPatterns();
+</script>
 </body>
 </html>
