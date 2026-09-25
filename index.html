@@ -2,449 +2,248 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>7 Heroes: Dev's Unleashed Legacy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>7 Heroes: Dev Unleashed</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
-      background: #090d16;
+      background: #0d1117;
       color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      padding: 15px;
-      overflow-x: hidden;
+      padding: 10px;
     }
-
-    h1 {
-      margin-bottom: 5px;
-      color: #38bdf8;
-      text-shadow: 0 0 15px rgba(56, 189, 248, 0.8);
-      font-size: 2rem;
-      text-align: center;
-    }
-    .subtitle { color: #94a3b8; margin-bottom: 15px; font-size: 0.9rem; text-align: center; }
+    h1 { color: #38bdf8; font-size: 1.4rem; margin-bottom: 4px; text-align: center; }
+    .subtitle { color: #f59e0b; font-size: 0.85rem; margin-bottom: 12px; text-align: center; font-weight: bold; }
 
     #game-container {
-      background: #111827;
-      border: 3px solid #3b82f6;
-      border-radius: 16px;
-      padding: 20px;
+      background: #161b22;
+      border: 2px solid #30363d;
+      border-radius: 12px;
+      padding: 12px;
       width: 100%;
-      max-width: 850px;
-      box-shadow: 0 0 35px rgba(59, 130, 246, 0.3);
-      position: relative;
+      max-width: 500px;
     }
 
-    /* Character Selection Grid */
-    .char-selection {
+    /* Character Cards */
+    .char-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
-      gap: 10px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
     }
     .char-card {
-      background: #1f2937;
-      border: 2px solid #374151;
-      border-radius: 10px;
-      padding: 10px;
+      background: #21262d;
+      border: 2px solid #30363d;
+      border-radius: 8px;
+      padding: 6px 2px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s ease;
-      position: relative;
     }
-    .char-card:hover { transform: translateY(-4px) scale(1.02); border-color: #38bdf8; box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3); }
-    .char-card.is-dev {
-      border-color: #f59e0b;
-      background: linear-gradient(180deg, #451a03 0%, #1f2937 100%);
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
-    }
-    .char-avatar { font-size: 2.2rem; margin-bottom: 3px; }
-    .char-name { font-weight: bold; font-size: 0.85rem; color: #f3f4f6; }
-    .char-role { font-size: 0.7rem; color: #9ca3af; }
+    .char-card.selected { border-color: #38bdf8; background: #1f6feb33; }
+    .char-card.is-dev { border-color: #f59e0b; background: #f59e0b22; }
+    .char-icon { font-size: 1.5rem; }
+    .char-name { font-size: 0.75rem; font-weight: bold; margin-top: 2px; }
 
     /* Battle Arena */
     #arena {
-      height: 280px;
-      background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
-      border: 2px solid #312e81;
-      border-radius: 12px;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 20px;
+      background: #090d16;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 15px 10px;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      padding: 25px 50px;
-    }
-
-    .fighter {
-      display: flex;
-      flex-direction: column;
+      justify-content: space-around;
       align-items: center;
-      z-index: 2;
-      transition: transform 0.1s;
+      margin-bottom: 12px;
     }
-    .fighter-icon { font-size: 4.5rem; filter: drop-shadow(0 8px 8px rgba(0,0,0,0.6)); }
-    
-    /* Dev Aura Glow */
-    .fighter-dev .fighter-icon { animation: devAura 1.2s infinite alternate; }
-    @keyframes devAura {
-      from { filter: drop-shadow(0 0 8px #f59e0b); }
-      to { filter: drop-shadow(0 0 25px #ef4444); }
-    }
+    .fighter { text-align: center; width: 40%; }
+    .fighter-icon { font-size: 3rem; margin-bottom: 5px; }
+    .hp-bg { background: #30363d; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 4px; }
+    .hp-fill { background: #238636; height: 100%; width: 100%; transition: width 0.2s; }
 
-    /* Rage Mode Visual */
-    .god-mode {
-      animation: ragePulse 0.5s infinite alternate !important;
-    }
-    @keyframes ragePulse {
-      from { filter: drop-shadow(0 0 15px #ef4444) scale(1); }
-      to { filter: drop-shadow(0 0 35px #f59e0b) scale(1.15); }
-    }
-
-    /* Health Bars */
-    .hp-box { text-align: center; width: 140px; }
-    .hp-title { font-size: 0.8rem; font-weight: bold; margin-bottom: 4px; display: flex; justify-content: space-between; }
-    .hp-bar-bg {
-      width: 100%;
-      height: 16px;
-      background: #374151;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 2px solid #4b5563;
-    }
-    .hp-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #22c55e, #10b981);
-      width: 100%;
-      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* Controls Grid */
+    /* Action Buttons */
     .controls {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
     button {
-      background: #2563eb;
+      background: #238636;
       color: white;
       border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    }
-    button:hover { background: #1d4ed8; transform: translateY(-2px); }
-    button:active { transform: translateY(0); }
-    button:disabled { background: #4b5563; cursor: not-allowed; opacity: 0.6; }
-
-    button.op-thunder {
-      background: linear-gradient(45deg, #0284c7, #38bdf8);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
-    }
-    button.op-fire {
-      background: linear-gradient(45deg, #d97706, #ef4444);
-      box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
-    }
-    button.op-rage {
-      background: linear-gradient(45deg, #8b5cf6, #ec4899);
-      box-shadow: 0 0 15px rgba(236, 72, 153, 0.5);
-    }
-
-    /* Combat Log & Damage Floating Text */
-    #log {
-      margin-top: 15px;
-      background: #030712;
-      border: 1px solid #1f2937;
-      border-radius: 8px;
       padding: 12px;
-      height: 100px;
-      overflow-y: auto;
-      font-size: 0.85rem;
-      font-family: monospace;
-      color: #38bdf8;
-    }
-
-    .damage-pop {
-      position: absolute;
+      border-radius: 8px;
       font-weight: bold;
-      font-size: 2rem;
-      color: #ef4444;
-      text-shadow: 0 0 8px #000;
-      animation: floatUp 0.8s forwards;
-      pointer-events: none;
-      z-index: 10;
+      font-size: 0.85rem;
+      cursor: pointer;
     }
-    @keyframes floatUp {
-      0% { opacity: 1; transform: translateY(0) scale(1); }
-      100% { opacity: 0; transform: translateY(-50px) scale(1.3); }
-    }
+    button:active { opacity: 0.7; }
+    button.btn-thunder { background: #1f6feb; }
+    button.btn-fire { background: #da3633; }
+    button.btn-reset { background: #30363d; grid-column: span 2; }
 
-    /* Screen Shake FX */
-    .shake { animation: shakeAnim 0.3s ease-in-out; }
-    @keyframes shakeAnim {
-      0%, 100% { transform: translate(0, 0); }
-      25% { transform: translate(-8px, 5px); }
-      50% { transform: translate(8px, -5px); }
-      75% { transform: translate(-5px, -5px); }
+    /* Log Box */
+    #log {
+      margin-top: 10px;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 8px;
+      height: 70px;
+      overflow-y: auto;
+      font-size: 0.75rem;
+      color: #8b949e;
+      font-family: monospace;
     }
   </style>
 </head>
 <body>
 
-  <h1>🔥 7 HEROES: DEV'S UNLEASHED SHOWDOWN 🔥</h1>
-  <p class="subtitle">Select an opponent to battle <b>DEV (The Ultimate Leader)</b>!</p>
+  <h1>⚡ 7 Heroes Battle ⚡</h1>
+  <p class="subtitle">👑 DEV (Leader) vs Opponents</p>
 
   <div id="game-container">
-    <div class="char-selection" id="char-select"></div>
+    <div style="font-size:0.75rem; color:#8b949e; margin-bottom:6px;">Tap any character below to fight DEV:</div>
+    <div class="char-grid" id="char-grid"></div>
 
     <div id="arena">
-      <div class="fighter fighter-dev" id="dev-fighter">
-        <div class="hp-box">
-          <div class="hp-title"><span style="color:#f59e0b;">DEV</span><span id="dev-hp-num">250/250</span></div>
-          <div class="hp-bar-bg"><div class="hp-bar-fill" id="dev-hp"></div></div>
-        </div>
-        <div class="fighter-icon" id="dev-icon">👑</div>
+      <div class="fighter">
+        <strong style="color:#f59e0b; font-size:0.85rem;">DEV (OP)</strong>
+        <div class="fighter-icon">👑</div>
+        <div style="font-size:0.7rem;" id="dev-hp-txt">200/200</div>
+        <div class="hp-bg"><div class="hp-fill" id="dev-hp-bar"></div></div>
       </div>
-      
-      <div style="font-size:2.5rem; font-weight:bold; color:#ef4444; align-self:center; font-style:italic; text-shadow:0 0 10px #ef4444;">VS</div>
 
-      <div class="fighter" id="opp-fighter">
-        <div class="hp-box">
-          <div class="hp-title"><span id="opp-name" style="color:#38bdf8;">Opponent</span><span id="opp-hp-num">0/0</span></div>
-          <div class="hp-bar-bg"><div class="hp-bar-fill" id="opp-hp" style="background:#38bdf8;"></div></div>
-        </div>
+      <div style="font-weight:bold; color:#da3633;">VS</div>
+
+      <div class="fighter">
+        <strong style="color:#38bdf8; font-size:0.85rem;" id="opp-name">Select</strong>
         <div class="fighter-icon" id="opp-icon">❓</div>
+        <div style="font-size:0.7rem;" id="opp-hp-txt">0/0</div>
+        <div class="hp-bg"><div class="hp-fill" id="opp-hp-bar" style="background:#38bdf8;"></div></div>
       </div>
     </div>
 
     <div class="controls">
-      <button class="op-thunder" onclick="playTurn('thunder')">⚡ Thunder Strike</button>
-      <button class="op-fire" onclick="playTurn('fireball')">🔥 Ultimate Fireball</button>
-      <button class="op-rage" onclick="playTurn('rage')">💥 God Mode Burst</button>
-      <button onclick="playTurn('normal')">⚔️ Quick Strike</button>
-      <button style="background:#374151;" onclick="resetGame()">🔄 Reset Match</button>
+      <button class="btn-thunder" onclick="attack('thunder')">⚡ Thunder</button>
+      <button class="btn-fire" onclick="attack('fire')">🔥 Fireball</button>
+      <button onclick="attack('normal')">⚔️ Strike</button>
+      <button class="btn-reset" onclick="resetGame()">🔄 Restart Game</button>
     </div>
 
-    <div id="log">Welcome! Select a challenger to start the fight.</div>
+    <div id="log">> Game Ready! Tap a character to start.</div>
   </div>
 
   <script>
-    // --- Audio Sound Synthesizer (No Downloads Needed) ---
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(type) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      if (type === 'hit') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(120, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.15);
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.15);
-      } else if (type === 'fire') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(60, audioCtx.currentTime + 0.3);
-        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-      } else if (type === 'thunder') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.25);
-        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.25);
-      } else if (type === 'win') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.4);
-        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.4);
-      }
-    }
-
-    // --- Characters Config ---
-    const characters = [
-      { id: 'dev', name: 'DEV', role: 'Supreme Leader', icon: '👑', hp: 250, maxHp: 250, attack: 40, isDev: true },
-      { id: 'anish', name: 'Anish', role: 'Speedster Ninja', icon: '🥷', hp: 120, maxHp: 120, attack: 22 },
-      { id: 'krishna', name: 'Krishna', role: 'Mystic Sorcerer', icon: '🧙‍♂️', hp: 130, maxHp: 130, attack: 25 },
-      { id: 'atul', name: 'Atul', role: 'Iron Shield Tank', icon: '🛡️', hp: 170, maxHp: 170, attack: 18 },
-      { id: 'juhi', name: 'Juhi', role: 'Sniper Archer', icon: '🏹', hp: 110, maxHp: 110, attack: 28 },
-      { id: 'tamanna', name: 'Tamanna', role: 'Shadow Assassin', icon: '🗡️', hp: 105, maxHp: 105, attack: 32 },
-      { id: 'raman', name: 'Raman', role: 'Grand Tactician', icon: '⚙️', hp: 125, maxHp: 125, attack: 24 }
+    const chars = [
+      { id: 'dev', name: 'DEV', icon: '👑', hp: 200, attack: 35, isDev: true },
+      { id: 'anish', name: 'Anish', icon: '🥷', hp: 100, attack: 18 },
+      { id: 'krishna', name: 'Krishna', icon: '🧙‍♂️', hp: 110, attack: 20 },
+      { id: 'atul', name: 'Atul', icon: '🛡️', hp: 130, attack: 15 },
+      { id: 'juhi', name: 'Juhi', icon: '🏹', hp: 95, attack: 22 },
+      { id: 'tamanna', name: 'Tamanna', icon: '🗡️', hp: 90, attack: 25 },
+      { id: 'raman', name: 'Raman', icon: '⚙️', hp: 105, attack: 19 }
     ];
 
-    let currentOpponent = null;
-    let devHP = 250;
+    let currentOpp = null;
+    let devHP = 200;
     let oppHP = 100;
-    let gameOver = false;
-    let isGodMode = false;
+    let isOver = false;
 
-    function renderCards() {
-      const container = document.getElementById('char-select');
-      container.innerHTML = '';
-      characters.forEach(c => {
+    function renderGrid() {
+      const grid = document.getElementById('char-grid');
+      grid.innerHTML = '';
+      chars.forEach(c => {
         const card = document.createElement('div');
-        card.className = `char-card ${c.isDev ? 'is-dev' : ''}`;
+        card.className = `char-card ${c.isDev ? 'is-dev' : ''} ${currentOpp && currentOpp.id === c.id ? 'selected' : ''}`;
         card.onclick = () => selectOpponent(c);
-        card.innerHTML = `
-          <div class="char-avatar">${c.icon}</div>
-          <div class="char-name">${c.name}</div>
-          <div class="char-role">${c.role}</div>
-        `;
-        container.appendChild(card);
+        card.innerHTML = `<div class="char-icon">${c.icon}</div><div class="char-name">${c.name}</div>`;
+        grid.appendChild(card);
       });
     }
 
-    function selectOpponent(char) {
-      if(char.isDev) {
-        log("DEV is the Boss! Choose another fighter to test DEV's power 👑");
+    function selectOpponent(c) {
+      if(c.isDev) {
+        log("DEV Boss hai! Kisi aur ko select karo.");
         return;
       }
-      currentOpponent = { ...char };
-      oppHP = char.hp;
-      devHP = 250;
-      gameOver = false;
-      isGodMode = false;
+      currentOpp = { ...c };
+      oppHP = c.hp;
+      devHP = 200;
+      isOver = false;
 
-      document.getElementById('dev-icon').classList.remove('god-mode');
-      document.getElementById('opp-icon').innerText = char.icon;
-      document.getElementById('opp-name').innerText = char.name;
+      document.getElementById('opp-icon').innerText = c.icon;
+      document.getElementById('opp-name').innerText = c.name;
       
-      updateHPBars();
-      log(`⚔️ BATTLE STARTED: DEV vs ${char.name} (${char.role})!`);
+      updateUI();
+      renderGrid();
+      log(`Match Started: DEV vs ${c.name}!`);
     }
 
-    function triggerPopText(damage, targetEl) {
-      const pop = document.createElement('div');
-      pop.className = 'damage-pop';
-      pop.innerText = `-${damage}`;
-      targetEl.appendChild(pop);
-      setTimeout(() => pop.remove(), 800);
-    }
-
-    function screenShake() {
-      const container = document.getElementById('game-container');
-      container.classList.add('shake');
-      setTimeout(() => container.classList.remove('shake'), 300);
-    }
-
-    function playTurn(moveType) {
-      if(!currentOpponent) {
-        log("⚠️ Please click on a character above to start!");
+    function attack(type) {
+      if(!currentOpp) {
+        log("Pehle uper se Opponent select karo!");
         return;
       }
-      if(gameOver) return;
+      if(isOver) return;
 
-      let devDamage = 0;
-      let devEl = document.getElementById('dev-fighter');
-      let oppEl = document.getElementById('opp-fighter');
+      let dmg = 0;
+      if (type === 'thunder') dmg = Math.floor(Math.random() * 20) + 30;
+      else if (type === 'fire') dmg = Math.floor(Math.random() * 25) + 35;
+      else dmg = Math.floor(Math.random() * 15) + 15;
 
-      // Check Rage State
-      if(devHP <= 100 && !isGodMode) {
-        isGodMode = true;
-        document.getElementById('dev-icon').classList.add('god-mode');
-        log("🔥 DEV ENTERED GOD MODE! ATTACK & DEFENSE BOOSTED!");
-      }
-
-      // Dev Attacks
-      if (moveType === 'thunder') {
-        devDamage = Math.floor(Math.random() * 20) + (isGodMode ? 50 : 35);
-        playSound('thunder');
-        screenShake();
-        log(`⚡ DEV calls Thunder Strike! Smashes ${currentOpponent.name} for ${devDamage} damage!`);
-      } else if (moveType === 'fireball') {
-        devDamage = Math.floor(Math.random() * 25) + (isGodMode ? 60 : 45);
-        playSound('fire');
-        screenShake();
-        log(`🔥 DEV casts Ultimate Fireball! Blasts ${currentOpponent.name} for ${devDamage} damage!`);
-      } else if (moveType === 'rage') {
-        devDamage = Math.floor(Math.random() * 30) + (isGodMode ? 70 : 50);
-        playSound('fire');
-        screenShake();
-        log(`💥 DEV unleashes God Burst! Deals a massive ${devDamage} damage!`);
-      } else {
-        devDamage = Math.floor(Math.random() * 15) + (isGodMode ? 30 : 20);
-        playSound('hit');
-        log(`⚔️ DEV strikes ${currentOpponent.name} dealing ${devDamage} damage.`);
-      }
-
-      oppHP = Math.max(0, oppHP - devDamage);
-      triggerPopText(devDamage, oppEl);
-      updateHPBars();
+      oppHP = Math.max(0, oppHP - dmg);
+      log(`DEV hit ${currentOpp.name} for ${dmg} dmg!`);
+      updateUI();
 
       if (oppHP <= 0) {
-        playSound('win');
-        log(`🏆 VICTORY! DEV obliterated ${currentOpponent.name}! Unbeatable Supreme Leader!`);
-        gameOver = true;
+        log(`🎉 DEV WIN! ${currentOpp.name} defeated!`);
+        isOver = true;
         return;
       }
 
-      // Opponent Counter Attack
+      // Counter attack
       setTimeout(() => {
-        if(gameOver) return;
-        let oppDamage = Math.floor(Math.random() * currentOpponent.attack) + 8;
-        
-        // Dev passive shield reduces damage by 35%
-        oppDamage = Math.floor(oppDamage * 0.65); 
-        if(isGodMode) oppDamage = Math.floor(oppDamage * 0.5); // 50% resistance in God Mode
-
-        devHP = Math.max(0, devHP - oppDamage);
-        playSound('hit');
-        triggerPopText(oppDamage, devEl);
-        log(`🛡️ ${currentOpponent.name} counters and hits DEV for ${oppDamage} damage.`);
-        updateHPBars();
+        if(isOver) return;
+        let oppDmg = Math.floor(Math.random() * currentOpp.attack) + 5;
+        oppDmg = Math.floor(oppDmg * 0.7); // Dev Armor
+        devHP = Math.max(0, devHP - oppDmg);
+        log(`${currentOpp.name} countered DEV for ${oppDmg} dmg.`);
+        updateUI();
 
         if (devHP <= 0) {
-          log(`😱 UNBELIEVABLE! ${currentOpponent.name} landed a lucky hit and defeated DEV! Click Reset to play again.`);
-          gameOver = true;
+          log(`😱 ${currentOpp.name} won! Press Restart.`);
+          isOver = true;
         }
-      }, 550);
+      }, 400);
     }
 
-    function updateHPBars() {
-      const devPct = Math.max(0, (devHP / 250) * 100);
-      const oppPct = currentOpponent ? Math.max(0, (oppHP / currentOpponent.maxHp) * 100) : 100;
+    function updateUI() {
+      document.getElementById('dev-hp-txt').innerText = `${devHP}/200`;
+      document.getElementById('dev-hp-bar').style.width = `${(devHP/200)*100}%`;
 
-      document.getElementById('dev-hp').style.width = devPct + '%';
-      document.getElementById('dev-hp-num').innerText = `${devHP}/250`;
-
-      if(currentOpponent) {
-        document.getElementById('opp-hp').style.width = oppPct + '%';
-        document.getElementById('opp-hp-num').innerText = `${oppHP}/${currentOpponent.maxHp}`;
+      if(currentOpp) {
+        document.getElementById('opp-hp-txt').innerText = `${oppHP}/${currentOpp.hp}`;
+        document.getElementById('opp-hp-bar').style.width = `${(oppHP/currentOpp.hp)*100}%`;
       }
     }
 
-    function log(msg) {
-      const logBox = document.getElementById('log');
-      logBox.innerHTML = `<div>> ${msg}</div>` + logBox.innerHTML;
+    function log(m) {
+      const l = document.getElementById('log');
+      l.innerHTML = `<div>> ${m}</div>` + l.innerHTML;
     }
 
     function resetGame() {
-      devHP = 250;
-      isGodMode = false;
-      document.getElementById('dev-icon').classList.remove('god-mode');
-      if(currentOpponent) oppHP = currentOpponent.maxHp;
-      gameOver = false;
-      updateHPBars();
-      log("🔄 Match Reset! DEV is fully restored and ready to fight!");
+      devHP = 200;
+      if(currentOpp) oppHP = currentOpp.hp;
+      isOver = false;
+      updateUI();
+      log("Game Restarted!");
     }
 
-    renderCards();
+    renderGrid();
   </script>
 </body>
 </html>
