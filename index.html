@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#12150d">
+<meta name="theme-color" content="#000000">
 <title>Mini Militia Classic</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
@@ -17,99 +17,108 @@
   --dim:#9a9d8c;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;background:var(--bg-deep);font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:var(--sand);}
+html,body{height:100%;overflow:hidden;background:#000;}
+body{display:flex;align-items:center;justify-content:center;font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:var(--sand);}
 .display{font-family:'Black Ops One',Impact,sans-serif;}
+
+#gameWrap{position:relative;width:min(100vw,177.78vh);height:min(100vh,56.25vw);background:var(--bg-deep);overflow:hidden;}
 #game{display:block;width:100%;height:100%;touch-action:none;}
 
-#charSelect{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%,#232a19,#12150d 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(24px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px));z-index:10;overflow-y:auto;}
-#charSelect h1{font-size:clamp(24px,6vw,38px);text-align:center;}
-#charSelect p{color:var(--dim);margin-top:8px;text-align:center;}
-.charGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:22px;max-width:640px;width:100%;}
-.charCard{background:var(--bg-panel);border-left:4px solid var(--khaki);padding:12px;cursor:pointer;text-align:left;user-select:none;}
+#rotateHint{display:none;position:fixed;inset:0;background:#000;color:var(--sand);align-items:center;justify-content:center;z-index:100;text-align:center;padding:24px;font-size:14px;}
+@media (orientation:portrait) and (max-width:700px){#rotateHint{display:flex;}}
+
+#charSelect{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,#232a19,#12150d 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px;z-index:10;overflow-y:auto;}
+#charSelect h1{font-size:clamp(18px,4.2vw,30px);text-align:center;}
+#charSelect p{color:var(--dim);margin-top:6px;text-align:center;font-size:12.5px;}
+.charGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:7px;margin-top:14px;max-width:560px;width:100%;}
+.charCard{background:var(--bg-panel);border-left:4px solid var(--khaki);padding:8px;cursor:pointer;text-align:left;user-select:none;}
 .charCard:hover,.charCard:active{background:#2a3220;border-left-color:var(--accent);}
 .charCard.dev{border-left-color:var(--accent);}
-.avatar{width:38px;height:38px;border-radius:4px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#14170f;}
-.cname{font-size:15px;font-weight:600;}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:2px 8px;font-size:11.5px;color:var(--dim);margin-top:6px;}
+.avatar{width:28px;height:28px;border-radius:4px;margin-bottom:5px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#14170f;}
+.cname{font-size:12.5px;font-weight:600;}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:1px 6px;font-size:9.5px;color:var(--dim);margin-top:4px;}
 
-#ui{position:fixed;top:0;left:0;right:0;display:none;justify-content:space-between;align-items:flex-start;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;z-index:3;pointer-events:none;}
-.hud{background:rgba(18,21,13,.6);padding:8px 10px;border-left:3px solid var(--khaki);}
-#healthBarWrap{width:130px;height:12px;background:#000;border:1px solid var(--dim);}
+#ui{position:absolute;top:0;left:0;right:0;display:none;justify-content:space-between;align-items:flex-start;padding:7px 9px;z-index:3;pointer-events:none;}
+.hud{background:rgba(18,21,13,.6);padding:5px 7px;border-left:3px solid var(--khaki);}
+#healthBarWrap{width:100px;height:9px;background:#000;border:1px solid var(--dim);}
 #healthBar{height:100%;background:var(--accent);width:100%;}
-#fuelBarWrap{width:130px;height:6px;background:#000;border:1px solid var(--dim);margin-top:5px;}
+#fuelBarWrap{width:100px;height:5px;background:#000;border:1px solid var(--dim);margin-top:3px;}
 #fuelBar{height:100%;background:#5b8fc7;width:100%;}
-#score{background:rgba(18,21,13,.6);padding:8px 10px;border-right:3px solid var(--khaki);font-size:14px;}
+#score{background:rgba(18,21,13,.6);padding:5px 7px;border-right:3px solid var(--khaki);font-size:11px;}
 
-#hint{position:fixed;left:0;right:0;text-align:center;bottom:calc(6px + env(safe-area-inset-bottom,0px));color:var(--dim);font-size:11px;display:none;z-index:3;padding:0 8px;}
+#hint{position:absolute;left:0;right:0;bottom:3px;text-align:center;color:var(--dim);font-size:8.5px;display:none;z-index:3;padding:0 6px;}
 
-#touchControls{position:fixed;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:none;justify-content:space-between;padding:0 16px;z-index:4;}
-.tgroup{display:flex;gap:10px;align-items:flex-end;}
-.tbtn{width:56px;height:56px;border-radius:50%;background:rgba(236,228,207,.14);border:2px solid rgba(236,228,207,.4);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--sand);touch-action:none;user-select:none;}
+#touchControls{position:absolute;left:0;right:0;bottom:8px;display:none;justify-content:space-between;padding:0 8px;z-index:4;}
+.tgroup{display:flex;gap:7px;align-items:flex-end;}
+.tbtn{width:36px;height:36px;border-radius:50%;background:rgba(236,228,207,.14);border:2px solid rgba(236,228,207,.4);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--sand);touch-action:none;user-select:none;}
 .tbtn:active{background:rgba(193,68,62,.5);}
-#btnShoot{width:70px;height:70px;font-size:26px;background:rgba(193,68,62,.3);border-color:var(--accent);}
+#btnShoot{width:44px;height:44px;font-size:17px;background:rgba(193,68,62,.3);border-color:var(--accent);}
 
-#gameOver{position:fixed;inset:0;background:rgba(10,12,7,.92);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:20;padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px));text-align:center;}
-#gameOver h1{font-size:clamp(26px,7vw,42px);}
-#goSub{color:var(--dim);margin-top:10px;}
-button{background:var(--accent);color:var(--sand);border:none;padding:12px 28px;font-size:16px;margin-top:22px;cursor:pointer;font-family:inherit;user-select:none;}
+#gameOver{position:absolute;inset:0;background:rgba(10,12,7,.92);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:20;padding:18px;text-align:center;}
+#gameOver h1{font-size:clamp(18px,4.5vw,28px);}
+#goSub{color:var(--dim);margin-top:7px;font-size:12px;}
+button{background:var(--accent);color:var(--sand);border:none;padding:9px 20px;font-size:13px;margin-top:14px;cursor:pointer;font-family:inherit;user-select:none;}
 button:active{background:#a63933;}
 </style>
 </head>
 <body>
+<div id="gameWrap">
+  <canvas id="game"></canvas>
 
-<div id="charSelect">
-  <h1 class="display">Mini Militia Classic</h1>
-  <p>Apna fighter chuno. Dev sabse powerful hai!</p>
-  <div class="charGrid" id="charGrid"></div>
-</div>
-
-<div id="ui">
-  <div class="hud">
-    <div id="healthBarWrap"><div id="healthBar"></div></div>
-    <div id="fuelBarWrap"><div id="fuelBar"></div></div>
+  <div id="charSelect">
+    <h1 class="display">Mini Militia Classic</h1>
+    <p>Apna fighter chuno. Dev sabse powerful hai!</p>
+    <div class="charGrid" id="charGrid"></div>
   </div>
-  <div id="score">Kills: 0 / 6</div>
-</div>
 
-<canvas id="game"></canvas>
-
-<div id="hint">A/D se chalo, W ya Space se udo, F ya click se goli chalao</div>
-
-<div id="touchControls">
-  <div class="tgroup">
-    <div class="tbtn" id="btnLeft">◀</div>
-    <div class="tbtn" id="btnRight">▶</div>
-    <div class="tbtn" id="btnFly">▲</div>
+  <div id="ui">
+    <div class="hud">
+      <div id="healthBarWrap"><div id="healthBar"></div></div>
+      <div id="fuelBarWrap"><div id="fuelBar"></div></div>
+    </div>
+    <div id="score">Kills: 0 / 6</div>
   </div>
-  <div class="tgroup">
-    <div class="tbtn" id="btnShoot">🔫</div>
+
+  <div id="hint">A/D se chalo, W ya Space se udo, F ya click se goli chalao</div>
+
+  <div id="touchControls">
+    <div class="tgroup">
+      <div class="tbtn" id="btnLeft">◀</div>
+      <div class="tbtn" id="btnRight">▶</div>
+      <div class="tbtn" id="btnFly">▲</div>
+    </div>
+    <div class="tgroup">
+      <div class="tbtn" id="btnShoot">🔫</div>
+    </div>
+  </div>
+
+  <div id="gameOver">
+    <h1 class="display" id="goText"></h1>
+    <p id="goSub"></p>
+    <button onclick="location.reload()">Phir se khelo</button>
   </div>
 </div>
 
-<div id="gameOver">
-  <h1 class="display" id="goText"></h1>
-  <p id="goSub"></p>
-  <button onclick="location.reload()">Phir se khelo</button>
-</div>
+<div id="rotateHint">🔄 Behtar experience ke liye phone ko landscape (side) mein ghumao</div>
 
 <script>
 const canvas=document.getElementById('game');
 const ctx=canvas.getContext('2d');
-function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
-resize();addEventListener('resize',resize);
+const W=960,H=540;
+canvas.width=W;canvas.height=H;
 
 const CHARS=[
-{n:'Dev',c:'#d64545',hp:140,sp:5,dmg:18,fuel:150},
-{n:'Krishna',c:'#4a7fb5',hp:110,sp:4.3,dmg:13,fuel:110},
-{n:'Anish',c:'#6b8f4e',hp:100,sp:4.2,dmg:12,fuel:105},
-{n:'Tamanna',c:'#b56fae',hp:105,sp:4.6,dmg:11,fuel:100},
-{n:'Juhi',c:'#d4a017',hp:95,sp:5,dmg:10,fuel:120},
-{n:'Raman',c:'#c96f34',hp:115,sp:4,dmg:14,fuel:100},
-{n:'Atul',c:'#4a9a8f',hp:100,sp:4.3,dmg:12,fuel:100}
+{n:'Dev',c:'#d64545',hp:150,sp:5,dmg:14,fuel:150},
+{n:'Krishna',c:'#4a7fb5',hp:115,sp:4.3,dmg:10,fuel:110},
+{n:'Anish',c:'#6b8f4e',hp:105,sp:4.2,dmg:9,fuel:105},
+{n:'Tamanna',c:'#b56fae',hp:110,sp:4.6,dmg:9,fuel:100},
+{n:'Juhi',c:'#d4a017',hp:100,sp:5,dmg:8,fuel:120},
+{n:'Raman',c:'#c96f34',hp:120,sp:4,dmg:11,fuel:100},
+{n:'Atul',c:'#4a9a8f',hp:105,sp:4.3,dmg:9,fuel:100}
 ];
 
 const grid=document.getElementById('charGrid');
-CHARS.forEach((ch,i)=>{
+CHARS.forEach(function(ch,i){
   const d=document.createElement('div');
   d.className='charCard'+(ch.n==='Dev'?' dev':'');
   d.innerHTML='<div class="avatar" style="background:'+ch.c+'">'+ch.n[0]+'</div><div class="cname">'+ch.n+'</div><div class="stats"><span>Health <b>'+ch.hp+'</b></span><span>Damage <b>'+ch.dmg+'</b></span><span>Speed <b>'+ch.sp+'</b></span><span>Fuel <b>'+ch.fuel+'</b></span></div>';
@@ -118,7 +127,7 @@ CHARS.forEach((ch,i)=>{
 });
 
 let player,bots=[],bullets=[],kills=0,keys={},platforms=[],groundY,gameRunning=false;
-const G=0.55,THRUST=0.95,MAXFALL=11;
+const G=0.55,THRUST=0.95,MAXFALL=11,BULLET_SPD=12;
 
 function makeChar(idx,x,y,isBot){
   const c=CHARS[idx];
@@ -126,13 +135,13 @@ function makeChar(idx,x,y,isBot){
 }
 
 function setupArena(){
-  groundY=canvas.height-46;
+  groundY=H-46;
   platforms=[
-    {x:canvas.width*0.08,y:canvas.height*0.72,w:150,h:16},
-    {x:canvas.width*0.40,y:canvas.height*0.56,w:180,h:16},
-    {x:canvas.width*0.72,y:canvas.height*0.72,w:150,h:16},
-    {x:canvas.width*0.22,y:canvas.height*0.36,w:140,h:16},
-    {x:canvas.width*0.58,y:canvas.height*0.32,w:140,h:16}
+    {x:W*0.08,y:H*0.72,w:150,h:16},
+    {x:W*0.40,y:H*0.56,w:180,h:16},
+    {x:W*0.72,y:H*0.72,w:150,h:16},
+    {x:W*0.22,y:H*0.36,w:140,h:16},
+    {x:W*0.58,y:H*0.32,w:140,h:16}
   ];
 }
 
@@ -144,11 +153,12 @@ function startGame(idx){
   setupArena();
   player=makeChar(idx,60,groundY-38,false);
   bots=[];
-  let bx=canvas.width-90;
-  CHARS.forEach((c,i)=>{
+  let bi=0;
+  CHARS.forEach(function(c,i){
     if(i!==idx){
+      const bx=520+bi*68;
       bots.push(makeChar(i,bx,groundY-38,true));
-      bx-=100; if(bx<canvas.width*0.45)bx=canvas.width-90;
+      bi++;
     }
   });
   bullets=[];kills=0;keys={};gameRunning=true;
@@ -159,7 +169,22 @@ function startGame(idx){
 function shoot(ch){
   if(ch.cool>0)return;
   ch.cool=20;
-  bullets.push({x:ch.x+ch.w/2+ch.facing*20,y:ch.y+14,vx:ch.facing*11,owner:ch,dmg:ch.dmg});
+  const targets=ch.isBot?[player]:bots;
+  let best=null,bestD=Infinity;
+  for(let i=0;i<targets.length;i++){
+    const t=targets[i];
+    if(t.hp<=0)continue;
+    const dd=Math.hypot((t.x+t.w/2)-(ch.x+ch.w/2),(t.y+t.h/2)-(ch.y+ch.h/2));
+    if(dd<bestD){bestD=dd;best=t;}
+  }
+  const gx=ch.x+ch.w/2+ch.facing*20, gy=ch.y+14;
+  let vx=ch.facing*BULLET_SPD, vy=0;
+  if(best){
+    const dx=(best.x+best.w/2)-gx, dy=(best.y+best.h/2)-gy;
+    const d=Math.hypot(dx,dy)||1;
+    vx=dx/d*BULLET_SPD; vy=dy/d*BULLET_SPD;
+  }
+  bullets.push({x:gx,y:gy,vx:vx,vy:vy,owner:ch,dmg:ch.dmg});
 }
 
 function physics(ch){
@@ -174,7 +199,7 @@ function physics(ch){
     }
   });
   if(ch.x<0)ch.x=0;
-  if(ch.x+ch.w>canvas.width)ch.x=canvas.width-ch.w;
+  if(ch.x+ch.w>W)ch.x=W-ch.w;
   if(ch.y<0){ch.y=0;ch.vy=0;}
   if(ch.cool>0)ch.cool--;
   if(ch.fuel<ch.maxFuel&&!ch.usingFuel)ch.fuel+=0.4;
@@ -196,18 +221,18 @@ function updateBot(b){
   const dx=player.x-b.x,dy=player.y-b.y,dist=Math.hypot(dx,dy);
   b.facing=dx>=0?1:-1;
   b.vx=0;
-  if(dist>150)b.vx=b.facing*b.sp*0.85;
-  else if(dist<70)b.vx=-b.facing*b.sp*0.6;
-  if(dy<-50&&b.fuel>10){b.vy-=THRUST;b.fuel-=1.5;b.usingFuel=true;}
-  else if(Math.random()<0.012&&b.fuel>30){b.vy-=THRUST*1.6;b.fuel-=1.5;b.usingFuel=true;}
-  if(Math.abs(dy)<70&&dist<450&&Math.random()<0.045)shoot(b);
+  if(dist>150)b.vx=b.facing*b.sp*0.8;
+  else if(dist<80)b.vx=-b.facing*b.sp*0.6;
+  if(dy<-60&&b.fuel>10){b.vy-=THRUST;b.fuel-=1.5;b.usingFuel=true;}
+  else if(Math.random()<0.008&&b.fuel>30){b.vy-=THRUST*1.6;b.fuel-=1.5;b.usingFuel=true;}
+  if(dist<420&&Math.random()<0.01)shoot(b);
   physics(b);
 }
 
 function updateBullets(){
   bullets=bullets.filter(function(bl){
-    bl.x+=bl.vx;
-    if(bl.x<0||bl.x>canvas.width||bl.y<0||bl.y>canvas.height)return false;
+    bl.x+=bl.vx; bl.y+=bl.vy;
+    if(bl.x<0||bl.x>W||bl.y<0||bl.y>H)return false;
     const targets=bl.owner.isBot?[player]:bots;
     for(let i=0;i<targets.length;i++){
       const t=targets[i];
@@ -230,14 +255,14 @@ function drawChar(ch){
   ctx.fillStyle='#ece4cf';ctx.font='11px Arial';ctx.textAlign='center';
   ctx.fillText(ch.name,ch.x+ch.w/2,ch.y-16);
   ctx.strokeStyle='#1a1a1a';ctx.lineWidth=4;
-  ctx.beginPath();ctx.moveTo(ch.x+ch.w/2,ch.y+14);ctx.lineTo(ch.x+ch.w/2+ch.facing*20,ch.y+14);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(ch.x+ch.w/2,ch.y+14);ctx.lineTo(ch.x+ch.w/2+ch.facing*18,ch.y+14);ctx.stroke();
 }
 
 function draw(){
-  const g=ctx.createLinearGradient(0,0,0,canvas.height);
+  const g=ctx.createLinearGradient(0,0,0,H);
   g.addColorStop(0,'#3a4750');g.addColorStop(1,'#7d8a72');
-  ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle='#2c2213';ctx.fillRect(0,groundY,canvas.width,canvas.height-groundY);
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#2c2213';ctx.fillRect(0,groundY,W,H-groundY);
   ctx.fillStyle='#5c5636';
   platforms.forEach(function(p){ctx.fillRect(p.x,p.y,p.w,p.h);});
   ctx.fillStyle='#f4c667';
