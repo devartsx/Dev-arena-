@@ -1,249 +1,305 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>7 Heroes: Dev Unleashed</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body {
-      background: #0d1117;
-      color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 10px;
-    }
-    h1 { color: #38bdf8; font-size: 1.4rem; margin-bottom: 4px; text-align: center; }
-    .subtitle { color: #f59e0b; font-size: 0.85rem; margin-bottom: 12px; text-align: center; font-weight: bold; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12150d">
+<title>Mini Militia Classic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-deep:#12150d;
+  --bg-panel:#20261a;
+  --accent:#c1443e;
+  --khaki:#96a366;
+  --sand:#ece4cf;
+  --dim:#9a9d8c;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:var(--bg-deep);font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:var(--sand);}
+.display{font-family:'Black Ops One',Impact,sans-serif;}
+#game{display:block;width:100%;height:100%;touch-action:none;}
 
-    #game-container {
-      background: #161b22;
-      border: 2px solid #30363d;
-      border-radius: 12px;
-      padding: 12px;
-      width: 100%;
-      max-width: 500px;
-    }
+#charSelect{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%,#232a19,#12150d 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(24px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px));z-index:10;overflow-y:auto;}
+#charSelect h1{font-size:clamp(24px,6vw,38px);text-align:center;}
+#charSelect p{color:var(--dim);margin-top:8px;text-align:center;}
+.charGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:22px;max-width:640px;width:100%;}
+.charCard{background:var(--bg-panel);border-left:4px solid var(--khaki);padding:12px;cursor:pointer;text-align:left;user-select:none;}
+.charCard:hover,.charCard:active{background:#2a3220;border-left-color:var(--accent);}
+.charCard.dev{border-left-color:var(--accent);}
+.avatar{width:38px;height:38px;border-radius:4px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#14170f;}
+.cname{font-size:15px;font-weight:600;}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:2px 8px;font-size:11.5px;color:var(--dim);margin-top:6px;}
 
-    /* Character Cards */
-    .char-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-    .char-card {
-      background: #21262d;
-      border: 2px solid #30363d;
-      border-radius: 8px;
-      padding: 6px 2px;
-      text-align: center;
-      cursor: pointer;
-    }
-    .char-card.selected { border-color: #38bdf8; background: #1f6feb33; }
-    .char-card.is-dev { border-color: #f59e0b; background: #f59e0b22; }
-    .char-icon { font-size: 1.5rem; }
-    .char-name { font-size: 0.75rem; font-weight: bold; margin-top: 2px; }
+#ui{position:fixed;top:0;left:0;right:0;display:none;justify-content:space-between;align-items:flex-start;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;z-index:3;pointer-events:none;}
+.hud{background:rgba(18,21,13,.6);padding:8px 10px;border-left:3px solid var(--khaki);}
+#healthBarWrap{width:130px;height:12px;background:#000;border:1px solid var(--dim);}
+#healthBar{height:100%;background:var(--accent);width:100%;}
+#fuelBarWrap{width:130px;height:6px;background:#000;border:1px solid var(--dim);margin-top:5px;}
+#fuelBar{height:100%;background:#5b8fc7;width:100%;}
+#score{background:rgba(18,21,13,.6);padding:8px 10px;border-right:3px solid var(--khaki);font-size:14px;}
 
-    /* Battle Arena */
-    #arena {
-      background: #090d16;
-      border: 1px solid #30363d;
-      border-radius: 10px;
-      padding: 15px 10px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    .fighter { text-align: center; width: 40%; }
-    .fighter-icon { font-size: 3rem; margin-bottom: 5px; }
-    .hp-bg { background: #30363d; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 4px; }
-    .hp-fill { background: #238636; height: 100%; width: 100%; transition: width 0.2s; }
+#hint{position:fixed;left:0;right:0;text-align:center;bottom:calc(6px + env(safe-area-inset-bottom,0px));color:var(--dim);font-size:11px;display:none;z-index:3;padding:0 8px;}
 
-    /* Action Buttons */
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    button {
-      background: #238636;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-    button:active { opacity: 0.7; }
-    button.btn-thunder { background: #1f6feb; }
-    button.btn-fire { background: #da3633; }
-    button.btn-reset { background: #30363d; grid-column: span 2; }
+#touchControls{position:fixed;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:none;justify-content:space-between;padding:0 16px;z-index:4;}
+.tgroup{display:flex;gap:10px;align-items:flex-end;}
+.tbtn{width:56px;height:56px;border-radius:50%;background:rgba(236,228,207,.14);border:2px solid rgba(236,228,207,.4);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--sand);touch-action:none;user-select:none;}
+.tbtn:active{background:rgba(193,68,62,.5);}
+#btnShoot{width:70px;height:70px;font-size:26px;background:rgba(193,68,62,.3);border-color:var(--accent);}
 
-    /* Log Box */
-    #log {
-      margin-top: 10px;
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 8px;
-      height: 70px;
-      overflow-y: auto;
-      font-size: 0.75rem;
-      color: #8b949e;
-      font-family: monospace;
-    }
-  </style>
+#gameOver{position:fixed;inset:0;background:rgba(10,12,7,.92);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:20;padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px));text-align:center;}
+#gameOver h1{font-size:clamp(26px,7vw,42px);}
+#goSub{color:var(--dim);margin-top:10px;}
+button{background:var(--accent);color:var(--sand);border:none;padding:12px 28px;font-size:16px;margin-top:22px;cursor:pointer;font-family:inherit;user-select:none;}
+button:active{background:#a63933;}
+</style>
 </head>
 <body>
 
-  <h1>⚡ 7 Heroes Battle ⚡</h1>
-  <p class="subtitle">👑 DEV (Leader) vs Opponents</p>
+<div id="charSelect">
+  <h1 class="display">Mini Militia Classic</h1>
+  <p>Apna fighter chuno. Dev sabse powerful hai!</p>
+  <div class="charGrid" id="charGrid"></div>
+</div>
 
-  <div id="game-container">
-    <div style="font-size:0.75rem; color:#8b949e; margin-bottom:6px;">Tap any character below to fight DEV:</div>
-    <div class="char-grid" id="char-grid"></div>
-
-    <div id="arena">
-      <div class="fighter">
-        <strong style="color:#f59e0b; font-size:0.85rem;">DEV (OP)</strong>
-        <div class="fighter-icon">👑</div>
-        <div style="font-size:0.7rem;" id="dev-hp-txt">200/200</div>
-        <div class="hp-bg"><div class="hp-fill" id="dev-hp-bar"></div></div>
-      </div>
-
-      <div style="font-weight:bold; color:#da3633;">VS</div>
-
-      <div class="fighter">
-        <strong style="color:#38bdf8; font-size:0.85rem;" id="opp-name">Select</strong>
-        <div class="fighter-icon" id="opp-icon">❓</div>
-        <div style="font-size:0.7rem;" id="opp-hp-txt">0/0</div>
-        <div class="hp-bg"><div class="hp-fill" id="opp-hp-bar" style="background:#38bdf8;"></div></div>
-      </div>
-    </div>
-
-    <div class="controls">
-      <button class="btn-thunder" onclick="attack('thunder')">⚡ Thunder</button>
-      <button class="btn-fire" onclick="attack('fire')">🔥 Fireball</button>
-      <button onclick="attack('normal')">⚔️ Strike</button>
-      <button class="btn-reset" onclick="resetGame()">🔄 Restart Game</button>
-    </div>
-
-    <div id="log">> Game Ready! Tap a character to start.</div>
+<div id="ui">
+  <div class="hud">
+    <div id="healthBarWrap"><div id="healthBar"></div></div>
+    <div id="fuelBarWrap"><div id="fuelBar"></div></div>
   </div>
+  <div id="score">Kills: 0 / 6</div>
+</div>
 
-  <script>
-    const chars = [
-      { id: 'dev', name: 'DEV', icon: '👑', hp: 200, attack: 35, isDev: true },
-      { id: 'anish', name: 'Anish', icon: '🥷', hp: 100, attack: 18 },
-      { id: 'krishna', name: 'Krishna', icon: '🧙‍♂️', hp: 110, attack: 20 },
-      { id: 'atul', name: 'Atul', icon: '🛡️', hp: 130, attack: 15 },
-      { id: 'juhi', name: 'Juhi', icon: '🏹', hp: 95, attack: 22 },
-      { id: 'tamanna', name: 'Tamanna', icon: '🗡️', hp: 90, attack: 25 },
-      { id: 'raman', name: 'Raman', icon: '⚙️', hp: 105, attack: 19 }
-    ];
+<canvas id="game"></canvas>
 
-    let currentOpp = null;
-    let devHP = 200;
-    let oppHP = 100;
-    let isOver = false;
+<div id="hint">A/D se chalo, W ya Space se udo, F ya click se goli chalao</div>
 
-    function renderGrid() {
-      const grid = document.getElementById('char-grid');
-      grid.innerHTML = '';
-      chars.forEach(c => {
-        const card = document.createElement('div');
-        card.className = `char-card ${c.isDev ? 'is-dev' : ''} ${currentOpp && currentOpp.id === c.id ? 'selected' : ''}`;
-        card.onclick = () => selectOpponent(c);
-        card.innerHTML = `<div class="char-icon">${c.icon}</div><div class="char-name">${c.name}</div>`;
-        grid.appendChild(card);
-      });
+<div id="touchControls">
+  <div class="tgroup">
+    <div class="tbtn" id="btnLeft">◀</div>
+    <div class="tbtn" id="btnRight">▶</div>
+    <div class="tbtn" id="btnFly">▲</div>
+  </div>
+  <div class="tgroup">
+    <div class="tbtn" id="btnShoot">🔫</div>
+  </div>
+</div>
+
+<div id="gameOver">
+  <h1 class="display" id="goText"></h1>
+  <p id="goSub"></p>
+  <button onclick="location.reload()">Phir se khelo</button>
+</div>
+
+<script>
+const canvas=document.getElementById('game');
+const ctx=canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resize();addEventListener('resize',resize);
+
+const CHARS=[
+{n:'Dev',c:'#d64545',hp:140,sp:5,dmg:18,fuel:150},
+{n:'Krishna',c:'#4a7fb5',hp:110,sp:4.3,dmg:13,fuel:110},
+{n:'Anish',c:'#6b8f4e',hp:100,sp:4.2,dmg:12,fuel:105},
+{n:'Tamanna',c:'#b56fae',hp:105,sp:4.6,dmg:11,fuel:100},
+{n:'Juhi',c:'#d4a017',hp:95,sp:5,dmg:10,fuel:120},
+{n:'Raman',c:'#c96f34',hp:115,sp:4,dmg:14,fuel:100},
+{n:'Atul',c:'#4a9a8f',hp:100,sp:4.3,dmg:12,fuel:100}
+];
+
+const grid=document.getElementById('charGrid');
+CHARS.forEach((ch,i)=>{
+  const d=document.createElement('div');
+  d.className='charCard'+(ch.n==='Dev'?' dev':'');
+  d.innerHTML='<div class="avatar" style="background:'+ch.c+'">'+ch.n[0]+'</div><div class="cname">'+ch.n+'</div><div class="stats"><span>Health <b>'+ch.hp+'</b></span><span>Damage <b>'+ch.dmg+'</b></span><span>Speed <b>'+ch.sp+'</b></span><span>Fuel <b>'+ch.fuel+'</b></span></div>';
+  d.onclick=function(){startGame(i);};
+  grid.appendChild(d);
+});
+
+let player,bots=[],bullets=[],kills=0,keys={},platforms=[],groundY,gameRunning=false;
+const G=0.55,THRUST=0.95,MAXFALL=11;
+
+function makeChar(idx,x,y,isBot){
+  const c=CHARS[idx];
+  return {name:c.n,color:c.c,x:x,y:y,vx:0,vy:0,w:26,h:38,hp:c.hp,maxHp:c.hp,sp:c.sp,dmg:c.dmg,fuel:c.fuel,maxFuel:c.fuel,facing:isBot?-1:1,onGround:false,cool:0,usingFuel:false,isBot:isBot};
+}
+
+function setupArena(){
+  groundY=canvas.height-46;
+  platforms=[
+    {x:canvas.width*0.08,y:canvas.height*0.72,w:150,h:16},
+    {x:canvas.width*0.40,y:canvas.height*0.56,w:180,h:16},
+    {x:canvas.width*0.72,y:canvas.height*0.72,w:150,h:16},
+    {x:canvas.width*0.22,y:canvas.height*0.36,w:140,h:16},
+    {x:canvas.width*0.58,y:canvas.height*0.32,w:140,h:16}
+  ];
+}
+
+function startGame(idx){
+  document.getElementById('charSelect').style.display='none';
+  document.getElementById('ui').style.display='flex';
+  document.getElementById('hint').style.display='block';
+  document.getElementById('touchControls').style.display='flex';
+  setupArena();
+  player=makeChar(idx,60,groundY-38,false);
+  bots=[];
+  let bx=canvas.width-90;
+  CHARS.forEach((c,i)=>{
+    if(i!==idx){
+      bots.push(makeChar(i,bx,groundY-38,true));
+      bx-=100; if(bx<canvas.width*0.45)bx=canvas.width-90;
     }
+  });
+  bullets=[];kills=0;keys={};gameRunning=true;
+  updateUI();
+  requestAnimationFrame(loop);
+}
 
-    function selectOpponent(c) {
-      if(c.isDev) {
-        log("DEV Boss hai! Kisi aur ko select karo.");
-        return;
+function shoot(ch){
+  if(ch.cool>0)return;
+  ch.cool=20;
+  bullets.push({x:ch.x+ch.w/2+ch.facing*20,y:ch.y+14,vx:ch.facing*11,owner:ch,dmg:ch.dmg});
+}
+
+function physics(ch){
+  ch.x+=ch.vx;
+  ch.vy+=G; if(ch.vy>MAXFALL)ch.vy=MAXFALL;
+  ch.y+=ch.vy;
+  ch.onGround=false;
+  if(ch.y+ch.h>=groundY){ch.y=groundY-ch.h;ch.vy=0;ch.onGround=true;}
+  platforms.forEach(function(p){
+    if(ch.vy>=0&&ch.x+ch.w>p.x+6&&ch.x<p.x+p.w-6&&ch.y+ch.h>=p.y&&ch.y+ch.h<=p.y+p.h+ch.vy+2){
+      ch.y=p.y-ch.h;ch.vy=0;ch.onGround=true;
+    }
+  });
+  if(ch.x<0)ch.x=0;
+  if(ch.x+ch.w>canvas.width)ch.x=canvas.width-ch.w;
+  if(ch.y<0){ch.y=0;ch.vy=0;}
+  if(ch.cool>0)ch.cool--;
+  if(ch.fuel<ch.maxFuel&&!ch.usingFuel)ch.fuel+=0.4;
+  ch.usingFuel=false;
+}
+
+function updatePlayer(){
+  player.vx=0;
+  if(keys['a']||keys['arrowleft']){player.vx=-player.sp;player.facing=-1;}
+  if(keys['d']||keys['arrowright']){player.vx=player.sp;player.facing=1;}
+  if((keys['w']||keys['arrowup']||keys[' '])&&player.fuel>0){
+    player.vy-=THRUST;player.fuel-=1.5;player.usingFuel=true;
+  }
+  if(keys['f'])shoot(player);
+  physics(player);
+}
+
+function updateBot(b){
+  const dx=player.x-b.x,dy=player.y-b.y,dist=Math.hypot(dx,dy);
+  b.facing=dx>=0?1:-1;
+  b.vx=0;
+  if(dist>150)b.vx=b.facing*b.sp*0.85;
+  else if(dist<70)b.vx=-b.facing*b.sp*0.6;
+  if(dy<-50&&b.fuel>10){b.vy-=THRUST;b.fuel-=1.5;b.usingFuel=true;}
+  else if(Math.random()<0.012&&b.fuel>30){b.vy-=THRUST*1.6;b.fuel-=1.5;b.usingFuel=true;}
+  if(Math.abs(dy)<70&&dist<450&&Math.random()<0.045)shoot(b);
+  physics(b);
+}
+
+function updateBullets(){
+  bullets=bullets.filter(function(bl){
+    bl.x+=bl.vx;
+    if(bl.x<0||bl.x>canvas.width||bl.y<0||bl.y>canvas.height)return false;
+    const targets=bl.owner.isBot?[player]:bots;
+    for(let i=0;i<targets.length;i++){
+      const t=targets[i];
+      if(t.hp>0&&bl.x>t.x&&bl.x<t.x+t.w&&bl.y>t.y&&bl.y<t.y+t.h){
+        t.hp-=bl.dmg;
+        return false;
       }
-      currentOpp = { ...c };
-      oppHP = c.hp;
-      devHP = 200;
-      isOver = false;
-
-      document.getElementById('opp-icon').innerText = c.icon;
-      document.getElementById('opp-name').innerText = c.name;
-      
-      updateUI();
-      renderGrid();
-      log(`Match Started: DEV vs ${c.name}!`);
     }
+    return true;
+  });
+}
 
-    function attack(type) {
-      if(!currentOpp) {
-        log("Pehle uper se Opponent select karo!");
-        return;
-      }
-      if(isOver) return;
+function drawChar(ch){
+  ctx.fillStyle=ch.color;
+  ctx.fillRect(ch.x,ch.y,ch.w,ch.h);
+  ctx.fillStyle='#000';
+  ctx.fillRect(ch.x,ch.y-11,ch.w,5);
+  ctx.fillStyle=ch.hp>ch.maxHp*0.3?'#7fbf5f':'#c1443e';
+  ctx.fillRect(ch.x,ch.y-11,ch.w*Math.max(0,ch.hp/ch.maxHp),5);
+  ctx.fillStyle='#ece4cf';ctx.font='11px Arial';ctx.textAlign='center';
+  ctx.fillText(ch.name,ch.x+ch.w/2,ch.y-16);
+  ctx.strokeStyle='#1a1a1a';ctx.lineWidth=4;
+  ctx.beginPath();ctx.moveTo(ch.x+ch.w/2,ch.y+14);ctx.lineTo(ch.x+ch.w/2+ch.facing*20,ch.y+14);ctx.stroke();
+}
 
-      let dmg = 0;
-      if (type === 'thunder') dmg = Math.floor(Math.random() * 20) + 30;
-      else if (type === 'fire') dmg = Math.floor(Math.random() * 25) + 35;
-      else dmg = Math.floor(Math.random() * 15) + 15;
+function draw(){
+  const g=ctx.createLinearGradient(0,0,0,canvas.height);
+  g.addColorStop(0,'#3a4750');g.addColorStop(1,'#7d8a72');
+  ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#2c2213';ctx.fillRect(0,groundY,canvas.width,canvas.height-groundY);
+  ctx.fillStyle='#5c5636';
+  platforms.forEach(function(p){ctx.fillRect(p.x,p.y,p.w,p.h);});
+  ctx.fillStyle='#f4c667';
+  bullets.forEach(function(bl){ctx.beginPath();ctx.arc(bl.x,bl.y,3,0,7);ctx.fill();});
+  bots.forEach(function(b){if(b.hp>0)drawChar(b);});
+  if(player.hp>0)drawChar(player);
+}
 
-      oppHP = Math.max(0, oppHP - dmg);
-      log(`DEV hit ${currentOpp.name} for ${dmg} dmg!`);
-      updateUI();
+function updateUI(){
+  document.getElementById('healthBar').style.width=Math.max(0,player.hp/player.maxHp*100)+'%';
+  document.getElementById('fuelBar').style.width=Math.max(0,player.fuel/player.maxFuel*100)+'%';
+  document.getElementById('score').textContent='Kills: '+kills+' / 6';
+}
 
-      if (oppHP <= 0) {
-        log(`🎉 DEV WIN! ${currentOpp.name} defeated!`);
-        isOver = true;
-        return;
-      }
+function endGame(won){
+  gameRunning=false;
+  document.getElementById('touchControls').style.display='none';
+  document.getElementById('hint').style.display='none';
+  document.getElementById('gameOver').style.display='flex';
+  document.getElementById('goText').textContent=won?'Aap jeet gaye!':'Aap haar gaye';
+  document.getElementById('goSub').textContent=won?('Sabhi 6 fighters haraye. Kills: '+kills):'Fir se koshish karo';
+}
 
-      // Counter attack
-      setTimeout(() => {
-        if(isOver) return;
-        let oppDmg = Math.floor(Math.random() * currentOpp.attack) + 5;
-        oppDmg = Math.floor(oppDmg * 0.7); // Dev Armor
-        devHP = Math.max(0, devHP - oppDmg);
-        log(`${currentOpp.name} countered DEV for ${oppDmg} dmg.`);
-        updateUI();
+function loop(){
+  if(!gameRunning)return;
+  updatePlayer();
+  bots.forEach(function(b){if(b.hp>0)updateBot(b);});
+  bots=bots.filter(function(b){
+    if(b.hp<=0){kills++;return false;}
+    return true;
+  });
+  updateBullets();
+  draw();
+  updateUI();
+  if(player.hp<=0)endGame(false);
+  else if(bots.length===0)endGame(true);
+  else requestAnimationFrame(loop);
+}
 
-        if (devHP <= 0) {
-          log(`😱 ${currentOpp.name} won! Press Restart.`);
-          isOver = true;
-        }
-      }, 400);
-    }
+addEventListener('keydown',function(e){
+  const k=e.key.toLowerCase();
+  keys[k]=true;
+  if(k===' '||k.indexOf('arrow')===0)e.preventDefault();
+});
+addEventListener('keyup',function(e){keys[e.key.toLowerCase()]=false;});
+canvas.addEventListener('click',function(){if(gameRunning)shoot(player);});
 
-    function updateUI() {
-      document.getElementById('dev-hp-txt').innerText = `${devHP}/200`;
-      document.getElementById('dev-hp-bar').style.width = `${(devHP/200)*100}%`;
-
-      if(currentOpp) {
-        document.getElementById('opp-hp-txt').innerText = `${oppHP}/${currentOpp.hp}`;
-        document.getElementById('opp-hp-bar').style.width = `${(oppHP/currentOpp.hp)*100}%`;
-      }
-    }
-
-    function log(m) {
-      const l = document.getElementById('log');
-      l.innerHTML = `<div>> ${m}</div>` + l.innerHTML;
-    }
-
-    function resetGame() {
-      devHP = 200;
-      if(currentOpp) oppHP = currentOpp.hp;
-      isOver = false;
-      updateUI();
-      log("Game Restarted!");
-    }
-
-    renderGrid();
-  </script>
+function bindTouch(id,key){
+  const el=document.getElementById(id);
+  const on=function(e){e.preventDefault();keys[key]=true;};
+  const off=function(e){e.preventDefault();keys[key]=false;};
+  el.addEventListener('touchstart',on,{passive:false});
+  el.addEventListener('touchend',off);
+  el.addEventListener('touchcancel',off);
+  el.addEventListener('mousedown',on);
+  el.addEventListener('mouseup',off);
+  el.addEventListener('mouseleave',off);
+}
+bindTouch('btnLeft','a');
+bindTouch('btnRight','d');
+bindTouch('btnFly',' ');
+bindTouch('btnShoot','f');
+</script>
 </body>
 </html>
